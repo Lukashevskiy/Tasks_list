@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./style/main.css">
+	<script type="text/javascript" src="./scripts/main.js"></script>
+	<title></title>
+</head>
+<body>
+	<div class="block__display_tasks">
+		<div class="header_in_display_block">
+			<h1>Список задач</h1>
+			<div class="button_in_changin_task_block">
+				<input type="button" name="task">
+				<span for="task">Добавить</span>
+			</div>
+		</div>
+
+		<li class="dark_background">
+			<div class="visual_task_from_block__display_tasks">
+				<input type="checkbox" name="task">
+				<span for="task">Задача 1</span>
+			</div>
+			<div class="task_buttons_from_block__display_tasks">
+				<input type="button" class="edit_button_in_task_list"></input>
+				<input type="button" class="delete_button_in_task_list"></input>
+			</div>
+			
+		</li>
+	</div>
+	<div class="block__changing_tasks">
+		<h1>Карточка задачи</h1>
+		<li class="task_name_in_changing_task_block">
+			<span class="task_name_in_changing_block">Задача</span>
+			<input type="text" name="task_property">
+		</li>
+		<li class="priority_in_changing_block">
+			<input type="checkbox" name="high_priority_task">
+			<span class="text_priority">Высокий приоритет</span>
+		</li>
+		<li class="buttons_in_changin_task_block">
+			<button name="save" class="save_task_in_changing_block">Сохранить</button>
+			<button name="cancel" class="cancel_task_in_changing_block">Отменить</button>
+		</li>
+	</div>
+
+</body>
+</html>
