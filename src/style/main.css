@@ -21,6 +21,7 @@ li{
 }
 
 .block__display_tasks{
+	position: fixed;
 	z-index: 1;
 	height: inherit;
 	width: 570px;
@@ -76,7 +77,7 @@ h1{
 .delete_button_in_task_list{
 	box-sizing: border-box;
 	height: 20px;
-	width: 20px;	
+	width: 20px;
 }
 input{
 	margin: 0;
@@ -97,7 +98,7 @@ span{
 }
 
 .block__changing_tasks{
-
+position: relative;
 	margin-top: 71px;
 	z-index: 0;
 	height: 212px;
@@ -162,7 +163,7 @@ span{
 .text_priority{
 	text-size: 14px;
 	color: #707070;
-	
+
 }
 
 

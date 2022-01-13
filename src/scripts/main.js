@@ -3,98 +3,141 @@ let block_changing_task;
 let block_task_list;
 let sample;
 let mas_of_tasks = [];
-
-task_list = [ 
-	{'is_complete':true, 'is_priority': false, 'discription': "dont do anyting"}, 
-	{'is_complete':true, 'is_priority': false, 'discription': "dont do anyting"},
-	{'is_complete':false, 'is_priority': false, 'discription': "dont do anyting"},
-	{'is_complete':true, 'is_priority': false, 'discription': "dont do anyting"},
-	{'is_complete':true, 'is_priority': false, 'discription': "dont do anyting"},
-	{'is_complete':true, 'is_priority': false, 'discription': "dont do anyting"}
+let idd = 0;
+let html_list;
+task_list = [
+	{'is_complete': true, 'is_priority': false, 'discription': "dont do anyting"},
+	{'is_complete': true, 'is_priority': false, 'discription': "dont do anyting"},
+	{'is_complete': false, 'is_priority': false, 'discription': "dont do anyting"},
+	{'is_complete': true, 'is_priority': false, 'discription': "dont do anyting"},
+	{'is_complete': true, 'is_priority': false, 'discription': "dont do anyting"},
+	{'is_complete': true, 'is_priority': false, 'discription': "dont do anyting"}
 ]
 
 
 class Task{
-	is_complete;
-	is_hight_priority;
-	discription;
-	html_element;
-	constructor(is_complete, is_hight_priority, discription, html_element_sample){
+	// id;
+	// is_complete;
+	// is_hight_priority;
+	// discription;
+	// html_element;
+	constructor(is_complete, is_hight_priority, discription, html_element_sample, id){
+		this.id = id;
 		this.is_complete = is_complete;
 		this.is_hight_priority = is_hight_priority;
 		this.html_element = document.createElement(html_element_sample.nodeName);
 		this.html_element.innerHTML = html_element_sample.innerHTML;
+		this.get_text_content().textContent = id;
 	}
 
 	add_to_document(DOM_structure){
 		DOM_structure.append(this.html_element);
-		this.html_element.children[1].firstElementChild.addEventListener('click', function(){ mod_of_changing_menu('edit'); });
+		let id = this.id;
+		this.get_edit_button().addEventListener("click", function () { console.log('edit'+id); });
+		this.get_delete_button().addEventListener('click', function () { console.log('remove'+id); });
+	}
+	remove_from_document(){
+		let id = this.id;
+		this.html_element.parentElement.removeChild(this.html_element);
+		this.get_edit_button().removeEventListener("click", function () { console.log('edit'+id);  });
+		this.get_delete_button().removeEventListener('click', function () { console.log('remove'+id); });
 	}
 
-}
-
-function save_changing_in_tasklist(id_task) {
-	if(id_task = mas_of_tasks.length){
-		new_task = new Task(false, block_changing_task.children[2].firstElementChild.checked,block_changing_task.children[1].lastElementChild.value, sample);
-		mas_of_tasks.push(new_task);
-	}else{
-		mas_of_tasks[id_task].html_element.children[0].lastElementChild.textContent = block_changing_task.children[1].lastElementChild.value;
+	get_edit_button(){
+		return this.html_element.lastElementChild.firstElementChild;
 	}
-	update_tasks();
-	block_changing_task.classList.add('on_holding');
+
+	get_delete_button(){
+		return this.html_element.lastElementChild.lastElementChild;
+	}
+
+	get_text_content(){
+		return this.html_element.firstElementChild.lastElementChild;
+	}
 }
 
-function mod_of_changing_menu(mod, id_task){
-	if(mod === 'edit'){
-		block_changing_task.classList.remove('on_holding');
-		block_changing_task.children[3].firstElementChild.addEventListener('click', function() { save_changing_in_tasklist(id_task) });
-		block_changing_task.children[3].lastElementChild.addEventListener('click', function() { cancel_changing_in_tasklist(id_task) });
-	}else if(mod === 'close'){
-		block_changing_task.classList.add('on_holding');
-		block_changing_task.children[3].firstElementChild.removeEventListener('click', function() { save_changing_in_tasklist(id_task) });
-		block_changing_task.children[3].lastElementChild.removeEventListener('click', function() { cancel_changing_in_tasklist(id_task) });
-	}else if(mod == 'new'){
-		block_changing_task.classList.remove('on_holding');
-		block_changing_task.children[3].firstElementChild.addEventListener('click', function() { save_changing_in_tasklist(id_task) });
-		block_changing_task.children[3].lastElementChild.addEventListener('click', function() { cancel_changing_in_tasklist(id_task) });
+function init_blocks() {
+	block_changing_task = document.querySelector('.block__changing_tasks');
+	block_task_list = document.querySelector('.block__display_tasks');
+	html_list = block_task_list.lastElementChild;
+	sample = html_list.firstElementChild;
+	html_list.removeChild(sample);
+}
+
+function add_task_to_mas(content){
+	console.log(-1010101010);
+	let new_task = new Task(
+	content['is_complete'],
+	content['is_priority'],
+	content['discription'],
+	sample,
+	idd);
+	mas_of_tasks.push(new_task);
+	idd++;
+}
+
+function update_display_list(){
+	block_task_list = document.querySelector('.block__display_tasks');
+	for (var i = 0; i < mas_of_tasks.length; i++) {
+		if(mas_of_tasks[i].html_element.parentElement !== null){
+			mas_of_tasks[i].remove_from_document();
+			console.log("f");
+		}
+	}
+	for (var i = 0; i < mas_of_tasks.length; i++) {
+		mas_of_tasks[i].add_to_document(html_list);
+		console.log('a');
 	}
 }
 
 function on_create() {
-	block_task_list = document.querySelector(".block__display_tasks");
-	block_changing_task = document.querySelector(".block__changing_tasks");
-	sample = block_task_list.children[1];
-	
-	block_task_list.removeChild(sample);
+	init_blocks();
 
-
-	for(let i = 0; i < task_list.length; i++){
-		new_task = new Task(task_list['is_complete'], task_list['is_priority'], task_list['discription'], sample); 
-		mas_of_tasks.push(new_task);
+	for (var i = 0; i < task_list.length; i++) {
+		add_task_to_mas(task_list[i]);
 	}
-	//console.log(mas_of_tasks.length);
 
-	block_task_list.children[0].children[1].firstElementChild.addEventListener('click', function(){ mod_of_changing_menu('new', mas_of_tasks.length)});
+	update_display_list();
 
-	mod_of_changing_menu('close');
-	update_tasks();
-
+	on_start();
 }
 
-function update_tasks() {
-	for(let i = 1; i < block_task_list.children.length; i++){
-		//block_task_list.children[i].lastElementChild.firstElementChild.removeEventListener('click', function() { mod_of_changing_menu('edit', i); });
-		//block_task_list.children[i].lastElementChild.lastElementChild.removeEventListener('click', function() { delete_from_task_list(i); });
-		block_task_list.children[i].children[1].firstElementChild.addEventListener('click', function(){ mod_of_changing_menu('edit');}); 
-		block_task_list.removeChild(block_task_list.children[i]);
-	}
-	for(let i = 0; i < mas_of_tasks.length; i++){
-		mas_of_tasks[i].add_to_document(block_task_list);
-
-		//console.log(mas_of_tasks[i].html_element);
-	}
-	console.log(mas_of_tasks.length);
+function on_start() {
+	let new_task_button = block_task_list.firstElementChild.lastElementChild.firstElementChild;
+	new_task_button.addEventListener('click', function(){start_new_task();});
+	block_changing_task.classList.add('on_holding');
 }
 
+function start_new_task(){
+	set_event_listener_to_new_task_button(-1);
+	block_changing_task.classList.remove('on_holding');
+}
 
+function set_event_listener_to_new_task_button(id_task){
+	let save_task_button = block_changing_task.lastElementChild.firstElementChild;
+	save_task_button.removeEventListener('click', function() { on_click_save_changing_in_task_list(id_task)} );
+	save_task_button.addEventListener('click', function() { on_click_save_changing_in_task_list(id_task) });
+}
+
+function on_click_save_changing_in_task_list(id_task){
+
+	console.log('\\\\\\\\\\\\\\\\\\\\');
+	if(id_task === -1){
+		content_of_new_task = {
+		'is_complete': false,
+		'is_priority': block_changing_task.children[2].firstElementChild.checked,
+		'discription': block_changing_task.children[1].lastElementChild.value}
+		add_task_to_mas(content_of_new_task);
+		clear_fields_of_changing_task_block();
+	}else{
+		mas_of_tasks[i].get_text_content = block_changing_task.children[1].lastElementChild.value
+	}
+	block_changing_task.classList.add('on_holding');
+	update_display_list();
+}
+
+function clear_fields_of_changing_task_block(){
+	block_changing_task.children[2].firstElementChild.checked = false;
+	block_changing_task.children[1].lastElementChild.value = '';
+}
 document.addEventListener("DOMContentLoaded", on_create);
