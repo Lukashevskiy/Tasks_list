@@ -21,7 +21,7 @@ li{
 }
 
 .block__display_tasks{
-	position: fixed;
+
 	z-index: 1;
 	height: inherit;
 	width: 570px;
